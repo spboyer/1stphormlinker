@@ -7,6 +7,11 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -59,12 +64,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Delete existing release and tag if they exist (ignore errors)
-        gh release delete ${{ steps.get_version.outputs.tag }} --yes || true
-        git tag -d ${{ steps.get_version.outputs.tag }} || true
-        git push origin :refs/tags/${{ steps.get_version.outputs.tag }} || true
-        
-        # Create the release
+        # Create the release (will update if it already exists)
         gh release create ${{ steps.get_version.outputs.tag }} \
           --title "1st Phorm Linker Extension v${{ steps.get_version.outputs.version }}" \
           --notes "## 1st Phorm Affiliate Linker Browser Extension v${{ steps.get_version.outputs.version }}
@@ -94,4 +94,6 @@ jobs:
           - Copy to clipboard functionality
           
           See the README.md file in the package for detailed usage instructions." \
-          ./1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+          ./1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip || \
+        gh release upload ${{ steps.get_version.outputs.tag }} \
+          ./1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip --clobber
