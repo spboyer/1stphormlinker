@@ -64,6 +64,10 @@ A Chrome/Edge browser extension that helps you quickly create and share affiliat
 3. Click it to see sharing options
 4. Select your preferred platform
 
+![Quick Share Button](images/quickshare.png)
+
+![Quick Share Options](images/quickshare2.png)
+
 ## Example
 
 Your affiliate code: `spboyer`
