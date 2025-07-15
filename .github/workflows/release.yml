@@ -50,27 +50,32 @@ jobs:
         
         # Verify the file exists and show file info
         ls -la 1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+        echo "Current directory:"
+        pwd
+        echo "All files in current directory:"
+        ls -la
     
     - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ steps.get_version.outputs.tag }}
-        name: 1st Phorm Linker Extension v${{ steps.get_version.outputs.version }}
-        body: |
-          ## 1st Phorm Affiliate Linker Browser Extension v${{ steps.get_version.outputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Create the release
+        gh release create ${{ steps.get_version.outputs.tag }} \
+          --title "1st Phorm Linker Extension v${{ steps.get_version.outputs.version }}" \
+          --notes "## 1st Phorm Affiliate Linker Browser Extension v${{ steps.get_version.outputs.version }}
           
           A Chrome/Edge browser extension that helps you quickly create and share affiliate links for 1st Phorm products.
           
           ### Installation Instructions:
           
-          1. **Download** the `1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip` file below
+          1. **Download** the \`1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip\` file below
           2. **Extract** the zip file to a folder on your computer
           3. **Open Chrome or Edge** browser
           4. **Navigate to Extensions**:
-             - Chrome: `chrome://extensions/`
-             - Edge: `edge://extensions/`
+             - Chrome: \`chrome://extensions/\`
+             - Edge: \`edge://extensions/\`
           5. **Enable Developer Mode** (toggle in top-right corner)
-          6. **Click "Load unpacked"** and select the extracted folder
+          6. **Click \"Load unpacked\"** and select the extracted folder
           7. **Pin the extension** to your toolbar for easy access
           
           ### Setup:
@@ -83,8 +88,5 @@ jobs:
           - Floating quick-share button on product pages
           - Copy to clipboard functionality
           
-          See the README.md file in the package for detailed usage instructions.
-        draft: false
-        prerelease: false
-        files: |
-          1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+          See the README.md file in the package for detailed usage instructions." \
+          ./1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
