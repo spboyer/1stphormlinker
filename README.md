@@ -17,7 +17,7 @@ A Chrome/Edge browser extension that helps you quickly create and share affiliat
 ### Option 1: Download Latest Release (Recommended)
 
 1. **Download the latest release**:
-   - Go to the [Releases page](https://github.com/yourusername/1stphormlinker/releases) *(replace `yourusername` with your actual 1stPhorm affiliate code)*
+   - Go to the [Releases page](https://github.com/spboyer/1stphormlinker/releases) 
    - Download the latest `1stphorm-linker-extension-v*.zip` file
    - Extract the zip file to a folder on your computer
 
