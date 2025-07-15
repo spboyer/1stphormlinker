@@ -145,9 +145,9 @@ This project uses GitHub Actions to automatically create releases:
 
 For issues or questions about this extension:
 
-- Check the [GitHub Issues](https://github.com/yourusername/1stphormlinker/issues) page *(replace `yourusername` with your actual GitHub username)*
+- Check the [GitHub Issues](https://github.com/spboyer/1stphormlinker/issues) page
 - Create a new issue if you encounter problems
-- Contact the developer for affiliate program questions
+- Reach out to spboyer on the Legionnaire / Team Momenta forum
 
 ## License
 
