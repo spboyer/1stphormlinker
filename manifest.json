@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "1st Phorm Affiliate Linker",
+  "version": "1.0",
+  "description": "Quickly create affiliate links for 1st Phorm products and share on social media",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://1stphorm.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "1st Phorm Affiliate Linker"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://1stphorm.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  }
+}

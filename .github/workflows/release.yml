@@ -1,0 +1,98 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - release
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: release
+    
+    - name: Get version from manifest
+      id: get_version
+      run: |
+        VERSION=$(grep -o '"version":[[:space:]]*"[^"]*"' manifest.json | cut -d'"' -f4)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+    
+    - name: Create extension package
+      run: |
+        # Create a clean directory for the extension files
+        mkdir -p extension-package
+        
+        # Copy all necessary files (exclude development files)
+        cp manifest.json extension-package/
+        cp popup.html extension-package/
+        cp popup.js extension-package/
+        cp content.js extension-package/
+        cp content.css extension-package/
+        cp -r icons extension-package/
+        cp -r images extension-package/
+        cp README.md extension-package/
+        
+        # Create zip file
+        cd extension-package
+        zip -r ../1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip .
+        cd ..
+        
+        # Verify zip contents
+        echo "Extension package contents:"
+        unzip -l 1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_version.outputs.tag }}
+        release_name: 1st Phorm Linker Extension v${{ steps.get_version.outputs.version }}
+        body: |
+          ## 1st Phorm Affiliate Linker Browser Extension v${{ steps.get_version.outputs.version }}
+          
+          A Chrome/Edge browser extension that helps you quickly create and share affiliate links for 1st Phorm products.
+          
+          ### Installation Instructions:
+          
+          1. **Download** the `1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip` file below
+          2. **Extract** the zip file to a folder on your computer
+          3. **Open Chrome or Edge** browser
+          4. **Navigate to Extensions**:
+             - Chrome: `chrome://extensions/`
+             - Edge: `edge://extensions/`
+          5. **Enable Developer Mode** (toggle in top-right corner)
+          6. **Click "Load unpacked"** and select the extracted folder
+          7. **Pin the extension** to your toolbar for easy access
+          
+          ### Setup:
+          - Click the extension icon and enter your affiliate code
+          - Navigate to any 1st Phorm product page to start generating affiliate links
+          
+          ### Features:
+          - One-click affiliate link generation
+          - Social media sharing integration
+          - Floating quick-share button on product pages
+          - Copy to clipboard functionality
+          
+          See the README.md file in the package for detailed usage instructions.
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+        asset_name: 1stphorm-linker-extension-v${{ steps.get_version.outputs.version }}.zip
+        asset_content_type: application/zip
