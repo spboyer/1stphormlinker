@@ -59,6 +59,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        # Delete existing release and tag if they exist (ignore errors)
+        gh release delete ${{ steps.get_version.outputs.tag }} --yes || true
+        git tag -d ${{ steps.get_version.outputs.tag }} || true
+        git push origin :refs/tags/${{ steps.get_version.outputs.tag }} || true
+        
         # Create the release
         gh release create ${{ steps.get_version.outputs.tag }} \
           --title "1st Phorm Linker Extension v${{ steps.get_version.outputs.version }}" \
